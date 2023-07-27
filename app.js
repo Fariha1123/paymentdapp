@@ -51,7 +51,7 @@ async function readFromFile(){
             dataEth = 0
         if(dataBsc == undefined)
             dataBsc = 0
-        let data = dataEth + dataBsc
+        let data = parseInt(dataEth) + parseInt(dataBsc)
         return data
       } catch (err) {
         return err
