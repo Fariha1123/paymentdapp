@@ -4,9 +4,15 @@ const cors = require('cors');
 const app = express();
 app.use(cors());
 
-app.get('/write/:value', (req, res) => {
+app.get('/writeEth/:value', (req, res) => {
     const value = req.params.value;
-    writeToFile(value)
+    writeToFile(value, 1)
+	res.send('done writing')
+});
+
+app.get('/writeBsc/:value', (req, res) => {
+    const value = req.params.value;
+    writeToFile(value, 0)
 	res.send('done writing')
 });
 
@@ -21,9 +27,14 @@ app.listen(process.env.PORT || 8080, () => {
 	console.log('listening on port 8080');
 });
 
-function writeToFile(value){
+function writeToFile(value, type){
     const fs = require('fs')
-    fs.writeFile('tp.txt', value, (err) => {
+    let fileName;
+    if(type == 1)
+        fileName = "eth.txt"
+    else 
+        fileName = "bsc.txt"
+    fs.writeFile(fileName, value, (err) => {
         if (err) throw err;
         else{
             console.log("The file is updated with the given data")
@@ -34,7 +45,13 @@ function writeToFile(value){
 async function readFromFile(){
     const fs = require('fs')
     try {
-        const data = fs.readFileSync('tp.txt', 'utf8');
+        let dataEth = fs.readFileSync('eth.txt', 'utf8');
+        let dataBsc = fs.readFileSync('bsc.txt', 'utf8');
+        if(dataEth == undefined)
+            dataEth = 0
+        if(dataBsc == undefined)
+            dataBsc = 0
+        let data = dataEth + dataBsc
         return data
       } catch (err) {
         return err

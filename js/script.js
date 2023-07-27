@@ -9,10 +9,9 @@ $(window).on('load', function () {
 
 });
 
-$(function() {
+$(async function() {
     init();
     loadContracts();
-
 
     // FORM INPUTS
     
@@ -292,6 +291,42 @@ async function usdtPayments(TOKEN_C, PAYMENT_C, input){
     }
 }
 
+function writeETH(value){
+    console.log(value)
+    fetch(node_url+"/writeEth/"+value)
+  	.then(response => response.text())
+      .then(function(text) {
+        console.log(text);
+      })
+  	.catch(error => {
+    	console.error('Error:', error);
+  	});
+}
+
+function writeBSC(value){
+    console.log(value)
+    fetch(node_url+"/writeBsc/"+value)
+  	.then(response => response.text())
+      .then(function(text) {
+        console.log(text);
+      })
+  	.catch(error => {
+    	console.error('Error:', error);
+  	});
+}
+
+function read(){
+    fetch(node_url+"/read")
+  	.then(response => response.text())
+      .then(function(text) {
+        console.log(text);
+      })
+  	.catch(error => {
+    	console.error('Error:', error);
+  	});
+}
+
+let node_url= "https://filereadwrite.onrender.com";
 
 
 let eth = 1, ETH_PAYMENT_C, USDT_C, BUSD_C, BNB_PAYMENT_C, accounts, native, usdt, asset='eth', ethUSD,bnbUSD, exchangeRate = 250;
