@@ -329,7 +329,7 @@ function read(){
   	});
 }
 
-let node_url= "https://localhost:8080"//"https://filereadwrite.onrender.com";
+let node_url= "https://filereadwrite.onrender.com";
 
 
 let eth = 1, ETH_PAYMENT_C, USDT_C, BUSD_C, BNB_PAYMENT_C, accounts, native, usdt, asset='eth', ethUSD,bnbUSD, exchangeRate = 250;

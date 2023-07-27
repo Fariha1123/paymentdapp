@@ -7,20 +7,20 @@ app.use(cors());
 app.get('/writeEth/:value', (req, res) => {
     const value = req.params.value;
     writeToFile(value, 1)
-	res.sendStatus('done writing')
+	res.send('done writing')
 });
 
 app.get('/writeBsc/:value', (req, res) => {
     const value = req.params.value;
     writeToFile(value, 0)
-	res.sendStatus('done writing')
+	res.send('done writing')
 });
 
 app.get('/read', async (req, res) => {
     
     let rs = await readFromFile()
     
-	res.sendStatus(rs)
+	res.send(rs)
 });
 
 app.listen(process.env.PORT || 8080, () => {
