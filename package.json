@@ -1,0 +1,22 @@
+{
+  "name": "y",
+  "version": "1.0.0",
+  "description": "node js application to read and write to the file",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Fariha1123/paymentdapp.git"
+  },
+  "author": "fariha.abbasi",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Fariha1123/paymentdapp/issues"
+  },
+  "homepage": "https://github.com/Fariha1123/paymentdapp#readme",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
