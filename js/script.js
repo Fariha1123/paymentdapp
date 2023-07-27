@@ -197,7 +197,6 @@ async function updateProgressBar() {
     let bought, totalToBuy;
     if(eth == 1){
         bought = await ETH_PAYMENT_C.methods.soldTokens().call();
-        bought = 100000000000
         bought = bought / 1e9
         await writeETH(bought)
     }
@@ -208,10 +207,7 @@ async function updateProgressBar() {
         await writeBSC(bought)
     }
     
-    let totalSold = await read()
-    $('#boughtVal').html(totalSold);
-    $('#totalToBuyVal').html();
-    $("#progressBar").css("width", totalSold/300000000*100 + "%")
+    let totalSold = read()
 }
 
 $.getJSON( "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=ethereum", 
@@ -321,8 +317,9 @@ function read(){
     fetch(node_url+"/read")
   	.then(response => response.text())
       .then(function(text) {
-        console.log(text)
-        return text
+        $('#boughtVal').html(text);
+        $('#totalToBuyVal').html(300000000);
+        $("#progressBar").css("width", text/300000000*100 + "%")
       })
   	.catch(error => {
     	console.error('Error:', error);
