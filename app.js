@@ -7,20 +7,20 @@ app.use(cors());
 app.get('/writeEth/:value', (req, res) => {
     const value = req.params.value;
     writeToFile(value, 1)
-	res.send('done writing')
+	res.sendStatus('done writing')
 });
 
 app.get('/writeBsc/:value', (req, res) => {
     const value = req.params.value;
     writeToFile(value, 0)
-	res.send('done writing')
+	res.sendStatus('done writing')
 });
 
 app.get('/read', async (req, res) => {
     
     let rs = await readFromFile()
     
-	res.send(rs)
+	res.sendStatus(rs)
 });
 
 app.listen(process.env.PORT || 8080, () => {
@@ -51,9 +51,9 @@ async function readFromFile(){
             dataEth = 0
         if(dataBsc == undefined)
             dataBsc = 0
-        let data = dataEth + dataBsc
+        let data = parseInt(dataEth) + parseInt(dataBsc)
         console.log(data)
-        return data
+        return data.toString()
       } catch (err) {
         return err
     }
