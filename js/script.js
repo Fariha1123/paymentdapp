@@ -210,8 +210,8 @@ async function updateProgressBar() {
     
     let totalSold = await read()
     $('#boughtVal').html(totalSold);
-    $('#totalToBuyVal').html(300000000);
-    $("#progressBar").css("width", bought/totalToBuy*100 + "%")
+    $('#totalToBuyVal').html();
+    $("#progressBar").css("width", totalSold/300000000*100 + "%")
 }
 
 $.getJSON( "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=ethereum", 
@@ -321,6 +321,7 @@ function read(){
     fetch(node_url+"/read")
   	.then(response => response.text())
       .then(function(text) {
+        console.log(text)
         return text
       })
   	.catch(error => {
