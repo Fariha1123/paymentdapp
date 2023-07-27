@@ -6,34 +6,35 @@ app.use(cors());
 
 app.get('/writeEth/:value', (req, res) => {
     const value = req.params.value;
-    writeToFile(value, 1)
+    writeToFile(value, "eth.txt")
 	res.send('done writing')
 });
 
 app.get('/writeBsc/:value', (req, res) => {
     const value = req.params.value;
-    writeToFile(value, 0)
+    writeToFile(value, "bsc.txt")
 	res.send('done writing')
 });
 
 app.get('/read', async (req, res) => {
     
-    let rs = await readFromFile()
+    let rs = await readFromFile("eth.txt", "bsc.txt")
     
 	res.send(rs)
 });
 
+app.get('/readT', async (req, res) => {
+    
+    let rs = await readFromFile("ethT.txt", "bscT.txt")
+    
+	res.send(rs)
+});
 app.listen(process.env.PORT || 8080, () => {
 	console.log('listening on port 8080');
 });
 
-function writeToFile(value, type){
+function writeToFile(value, fileName){
     const fs = require('fs')
-    let fileName;
-    if(type == 1)
-        fileName = "eth.txt"
-    else 
-        fileName = "bsc.txt"
     fs.writeFile(fileName, value, (err) => {
         if (err) throw err;
         else{
@@ -42,11 +43,11 @@ function writeToFile(value, type){
     })
 }
 
-async function readFromFile(){
+async function readFromFile(fileA, fileB){
     const fs = require('fs')
     try {
-        let dataEth = fs.readFileSync('eth.txt', 'utf8');
-        let dataBsc = fs.readFileSync('bsc.txt', 'utf8');
+        let dataEth = fs.readFileSync(fileA, 'utf8');
+        let dataBsc = fs.readFileSync(fileB, 'utf8');
         if(dataEth == undefined)
             dataEth = 0
         if(dataBsc == undefined)
@@ -58,3 +59,15 @@ async function readFromFile(){
         return err
     }
 }
+
+app.get('/tokensEth/:value', (req, res) => {
+    const value = req.params.value;
+    writeToFile(value, "ethT.txt")
+	res.send('done writing')
+});
+
+app.get('/tokensBsc/:value', (req, res) => {
+    const value = req.params.value;
+    writeToFile(value, "bscT.txt")
+	res.send('done writing')
+});

@@ -117,6 +117,7 @@ $(async function() {
             asset = 'bnb';
             loadContracts()
             getNetwork()
+            
         }else {// CHANE TO ETH
             $("#coin-1").val("eth").prop("checked", true);
             $("#coin-1-label").html("<img src='images/eth.png' alt='ETH'> ETH");
@@ -176,6 +177,7 @@ async function getNetwork() {
         native = await new web3Instance.eth.getBalance(accounts[0]);
         native = native / 1e18;
         usdt = await BUSD_C.methods.balanceOf(accounts[0]).call() / 1e18;
+        updateTokens()
       }
    } else {
       if (net != "goerli" && id != 1) { 
@@ -186,6 +188,7 @@ async function getNetwork() {
          native = await new web3Instance.eth.getBalance(accounts[0]);
          native = native / 1e18;
          usdt = await USDT_C.methods.balanceOf(accounts[0]).call() / 1e6;
+         updateTokens()
       }
    }
 
@@ -198,16 +201,34 @@ async function updateProgressBar() {
     if(eth == 1){
         bought = await ETH_PAYMENT_C.methods.soldTokens().call();
         bought = bought / 1e9
-        await writeETH(bought)
+        await writeETH(bought, "writeEth")
     }
     
     else {
         bought = await BNB_PAYMENT_C.methods.soldTokens().call();
         bought = bought / 1e9
-        await writeBSC(bought)
+        await writeBSC(bought, "writeBsc")
     }
     
     let totalSold = read()
+}
+
+async function updateTokens() {
+    // PROGRESSBAR VALUES
+    let bought;
+    if(eth == 1){
+        bought = await ETH_PAYMENT_C.methods.tokens(accounts[0]).call();
+        bought = bought / 1e9
+        await writeETH(bought, "tokensEth")
+    }
+    
+    else {
+        bought = await BNB_PAYMENT_C.methods.tokens(accounts[0]).call();
+        bought = bought / 1e9
+        await writeBSC(bought, "tokensBsc")
+    }
+    
+    let tokens = read()
 }
 
 $.getJSON( "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=ethereum", 
@@ -289,9 +310,9 @@ async function usdtPayments(TOKEN_C, PAYMENT_C, input){
     }
 }
 
-function writeETH(value){
+function writeETH(value, path){
     console.log(value)
-    fetch(node_url+"/writeEth/"+value)
+    fetch(node_url+"/"+path+"/"+value)
   	.then(response => response.text())
       .then(function(text) {
         console.log(text);
@@ -301,9 +322,9 @@ function writeETH(value){
   	});
 }
 
-function writeBSC(value){
+function writeBSC(value, path){
     console.log(value)
-    fetch(node_url+"/writeBsc/"+value)
+    fetch(node_url+"/"+path+"/"+value)
   	.then(response => response.text())
       .then(function(text) {
         console.log(text);
@@ -320,6 +341,17 @@ function read(){
         $('#boughtVal').html(text);
         $('#totalToBuyVal').html(300000000);
         $("#progressBar").css("width", text/300000000*100 + "%")
+      })
+  	.catch(error => {
+    	console.error('Error:', error);
+  	});
+}
+
+function readT(){
+    fetch(node_url+"/readT")
+  	.then(response => response.text())
+      .then(function(text) {
+        $('#tokens').html(text);
       })
   	.catch(error => {
     	console.error('Error:', error);
