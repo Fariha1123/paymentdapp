@@ -31,7 +31,7 @@ app.get('/readT/:account', (req, res) => {
         
         let data = fs.readFileSync(account+'.json');
         data = JSON.parse(data);
-        sum = data.eth + data.bsc
+        sum = parseInt(data.eth) + parseInt(data.bsc)
         console.log("Total tokens = " + sum)
         res.send(sum.toString())
     } else {
