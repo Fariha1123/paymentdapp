@@ -77,11 +77,11 @@ app.get('/tokensBsc/:value', (req, res) => {
 	res.send('done writing')
 });
 
-app.get('/tokens/:account/:type/:value', (req, res) => {
+app.get('/tokens/:account/:type/:value', async (req, res) => {
     const account = req.params.account;
     const type = req.params.type;
-    const value = req.params.value;
-    tokenJSON(account, type, value)
+    const value = req.params.value
+    await tokenJSON(account, type, value)
 	res.send('done writing to tokens file = ' + account)
 });
 

@@ -245,8 +245,6 @@ async function updateTokens() {
         bought = bought / 1e9
         await tokensinfo(eth, bought)
     }
-    
-    let tokens = readT()
 }
 
 function tokensinfo(type, value){
@@ -254,6 +252,7 @@ function tokensinfo(type, value){
   	.then(response => response.text())
       .then(function(text) {
         console.log(text);
+        readT()
       })
   	.catch(error => {
     	console.error('Error:', error);
@@ -383,7 +382,7 @@ function read(){
 }
 
 function readT(){
-    fetch(node_url+"/readT")
+    fetch(node_url+"/readT/"+accounts[0])
   	.then(response => response.text())
       .then(function(text) {
         $('#tokens').html(text);
