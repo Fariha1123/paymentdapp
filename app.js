@@ -26,8 +26,9 @@ app.get('/read', async (req, res) => {
 app.get('/readT/:account', (req, res) => {
     const account = req.params.account;
     let sum = 0;
+    const fs = require('fs')
     if (fs.existsSync(account+'.json')){
-        const fs = require('fs')
+        
         let data = fs.readFileSync(account+'.json');
         data = JSON.parse(data);
         sum = data.eth + data.bsc
