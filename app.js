@@ -23,8 +23,8 @@ app.get('/read', async (req, res) => {
 	res.send(rs)
 });
 
-app.get('/readT', (req, res) => {
-    
+app.get('/readT/:account', (req, res) => {
+    const account = req.params.account;
     //let rs = await readFromFile("ethT.txt", "bscT.txt")
     const fs = require('fs')
     let data = fs.readFileSync(account+'.json');
