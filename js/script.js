@@ -1,3 +1,22 @@
+function read(){
+    fetch(node_url+"/read")
+  	.then(response => response.text())
+      .then(function(text) {
+        $('#boughtVal').html(text);
+        $('#totalToBuyVal').html(300000000);
+        if ((text / 300000000) * 100 > 1) {	
+        $("#progressBar").css("width", (text / 300000000) * 100 + "%");	
+      } else {	
+        $("#progressBar").css("width", "1%");	
+      }
+      })
+  	.catch(error => {
+    	console.error('Error:', error);
+  	});
+}
+
+let node_url= "https://filereadwrite.onrender.com";
+read();
 $(window).on('load', function () {
 
     // PAGE LOADER
@@ -58,19 +77,17 @@ $(async function() {
 
     $('#connectWallet').click(function (e) {
         e.preventDefault();
-        console.log(typeof web3)
         if (typeof ethereum == 'undefined') {
             // Use Mist/MetaMask's provider
             alert("Your browser is not web3 supported, please connect to one of the following wallet")
             // Show a modal with two options : Metamask & Trust wallet
+$('#walletModal').modal('show');
             // When metamask is clicked, navigate it to: https://metamask.app.link/dapp/zifitoken.io/beta_01
             // When trust wallet is clicked, navigate it to following url:
-            /*
-            *   export const TRUST_URL = 'https://links.trustwalletapp.com/a/key_live_lfvIpVeI9TFWxPCqwU8rZnogFqhnzs4D?&event=openURL&url=';
+            
+const TRUST_URL = 'https://links.trustwalletapp.com/a/key_live_lfvIpVeI9TFWxPCqwU8rZnogFqhnzs4D?&event=openURL&url=';
                 const currentURI = window.location.href;
-                const deepLink = `${TRUST_URL}${encodeURIComponent(currentURI)}`    
-            *
-            */ 
+                const deepLink = `${TRUST_URL}${encodeURIComponent(currentURI)}`;
         } else {
             
             onConnect();
@@ -391,9 +408,6 @@ function readT(){
     	console.error('Error:', error);
   	});
 }
-
-let node_url= "https://filereadwrite.onrender.com";
-read();
 
 let eth = 1, ETH_PAYMENT_C, USDT_C, BUSD_C, BNB_PAYMENT_C, accounts, native, usdt, asset='eth', ethUSD,bnbUSD, exchangeRate = 250;
 
