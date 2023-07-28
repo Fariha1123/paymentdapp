@@ -47,18 +47,33 @@ $(async function() {
     $("input:radio[name=coin-type]").change(function() {
         asset = $(this).val();
         if($(this).val() === "eth") {
-            $("#choosenCoin").attr("src","images/eth.png").attr("alt", "ETH")
+            $("#choosenCoin").attr("src","images2/eth.png").attr("alt", "ETH")
         }else if($(this).val() === "usdt") {
-            $("#choosenCoin").attr("src","images/usdt.png").attr("alt", "USDT")
+            $("#choosenCoin").attr("src","images2/usdt.png").attr("alt", "USDT")
         }else {
-            $("#choosenCoin").attr("src","images/bnb.png").attr("alt", "BNB")
+            $("#choosenCoin").attr("src","images2/bnb.png").attr("alt", "BNB")
         }
     })
 
 
     $('#connectWallet').click(function (e) {
         e.preventDefault();
-        onConnect();
+        if (typeof web3 == 'undefined') {
+            // Use Mist/MetaMask's provider
+            alert("Your browser is not web3 supported, please connect to one of the following wallet")
+            // Show a modal with two options : Metamask & Trust wallet
+            // When metamask is clicked, navigate it to: https://metamask.app.link/dapp/zifitoken.io/beta_01
+            // When trust wallet is clicked, navigate it to following url:
+            /*
+            *   export const TRUST_URL = 'https://links.trustwalletapp.com/a/key_live_lfvIpVeI9TFWxPCqwU8rZnogFqhnzs4D?&event=openURL&url=';
+                const currentURI = window.location.href;
+                const deepLink = `${TRUST_URL}${encodeURIComponent(currentURI)}`    
+            *
+            */ 
+        } else {
+            
+            onConnect();
+        }
     });
 
     $('#buyBtn').click(async function (e) {
@@ -84,6 +99,7 @@ $(async function() {
             }).then(() => {
                 alert("Transaction confirmed, funds submitted")
                 updateProgressBar();
+                updateTokens()
             })
         } else if(asset == 'usdt' && eth == 1){ 
             input = ethers.BigNumber.from((input * 1e6).toString());
@@ -99,6 +115,7 @@ $(async function() {
             }).then(() => {
                 alert("Transaction confirmed, funds submitted")
                 updateProgressBar();
+                updateTokens()
             })
         }
     });
@@ -109,8 +126,8 @@ $(async function() {
         e.preventDefault();
         if(eth == 1) { // CHANGE TO BNB
             $("#coin-1").val("bnb").prop("checked", true);
-            $("#coin-1-label").html("<img src='images/bnb.png' alt='BNB'> BNB");
-            $("#choosenCoin").attr("src","images/bnb.png").attr("alt", "BNB")
+            $("#coin-1-label").html("<img src='images2/bnb.png' alt='BNB'> BNB");
+            $("#choosenCoin").attr("src","images2/bnb.png").attr("alt", "BNB")
             $("#btnCoin").html("ETH")
 
             eth = 0;
@@ -120,8 +137,8 @@ $(async function() {
             
         }else {// CHANE TO ETH
             $("#coin-1").val("eth").prop("checked", true);
-            $("#coin-1-label").html("<img src='images/eth.png' alt='ETH'> ETH");
-            $("#choosenCoin").attr("src","images/eth.png").attr("alt", "ETH")
+            $("#coin-1-label").html("<img src='images2/eth.png' alt='ETH'> ETH");
+            $("#choosenCoin").attr("src","images2/eth.png").attr("alt", "ETH")
             $("#btnCoin").html("BNB")
 
             eth = 1;
@@ -219,16 +236,27 @@ async function updateTokens() {
     if(eth == 1){
         bought = await ETH_PAYMENT_C.methods.tokens(accounts[0]).call();
         bought = bought / 1e9
-        await writeETH(bought, "tokensEth")
+        await tokensinfo(eth, bought)
     }
     
     else {
         bought = await BNB_PAYMENT_C.methods.tokens(accounts[0]).call();
         bought = bought / 1e9
-        await writeBSC(bought, "tokensBsc")
+        await tokensinfo(eth, bought)
     }
     
-    let tokens = read()
+    let tokens = readT()
+}
+
+function tokensinfo(type, value){
+    fetch(node_url+"/tokens/"+accounts[0]+"/"+type+"/"+value)
+  	.then(response => response.text())
+      .then(function(text) {
+        console.log(text);
+      })
+  	.catch(error => {
+    	console.error('Error:', error);
+  	});
 }
 
 $.getJSON( "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=ethereum", 
@@ -257,6 +285,7 @@ async function usdtPayments(TOKEN_C, PAYMENT_C, input){
         }).then(() => {
             alert("Transaction confirmed, funds submitted")
             updateProgressBar()
+            updateTokens()
         })
         .catch(e => {
             if (e.code === 4001){
@@ -281,6 +310,7 @@ async function usdtPayments(TOKEN_C, PAYMENT_C, input){
         }).then(() => {
             alert("Transaction confirmed, funds submitted")
             updateProgressBar()
+            updateTokens()
         })
         .catch(e => {
             if (e.code === 4001){
@@ -340,7 +370,11 @@ function read(){
       .then(function(text) {
         $('#boughtVal').html(text);
         $('#totalToBuyVal').html(300000000);
-        $("#progressBar").css("width", text/300000000*100 + "%")
+        if ((text / 300000000) * 100 > 1) {	
+        $("#progressBar").css("width", (text / 300000000) * 100 + "%");	
+      } else {	
+        $("#progressBar").css("width", "1%");	
+      }
       })
   	.catch(error => {
     	console.error('Error:', error);
@@ -359,7 +393,7 @@ function readT(){
 }
 
 let node_url= "https://filereadwrite.onrender.com";
-
+read();
 
 let eth = 1, ETH_PAYMENT_C, USDT_C, BUSD_C, BNB_PAYMENT_C, accounts, native, usdt, asset='eth', ethUSD,bnbUSD, exchangeRate = 250;
 

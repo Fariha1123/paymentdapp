@@ -25,10 +25,15 @@ app.get('/read', async (req, res) => {
 
 app.get('/readT', async (req, res) => {
     
-    let rs = await readFromFile("ethT.txt", "bscT.txt")
-    
-	res.send(rs)
+    //let rs = await readFromFile("ethT.txt", "bscT.txt")
+    const fs = require('fs')
+    let data = fs.readFileSync(account+'.json');
+    data = JSON.parse(data);
+    let sum = data.eth + data.bsc
+    console.log("Total tokens = " + sum)
+	res.send(sum)
 });
+
 app.listen(process.env.PORT || 8080, () => {
 	console.log('listening on port 8080');
 });
@@ -71,3 +76,39 @@ app.get('/tokensBsc/:value', (req, res) => {
     writeToFile(value, "bscT.txt")
 	res.send('done writing')
 });
+
+app.get('/tokens/:account/:type/:value', (req, res) => {
+    const account = req.params.account;
+    const type = req.params.type;
+    const value = req.params.value;
+    tokenJSON(account, type, value)
+	res.send('done writing to tokens file = ' + account)
+});
+
+function tokenJSON(account, type, value){
+    let info = { 
+        eth: 0,
+        bsc: 0
+    };
+    // read the data first
+    const fs = require('fs')
+    try {
+        let data = fs.readFileSync(account+'.json');
+        data = JSON.parse(data);
+        if(type == 1){
+            info.eth = value
+            info.bsc = data.bsc
+        }
+            
+        else{
+            info.bsc = value
+            info.eth = data.eth
+        }
+        info = JSON.stringify(info);
+        fs.writeFileSync(account+'.json', info);
+            
+      } catch (err) {
+        return err
+    }
+
+}

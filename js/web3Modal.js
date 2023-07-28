@@ -24,7 +24,9 @@ function init() {
 
     console.log("Initializing example");
     console.log("WalletConnectProvider is", WalletConnectProvider);
-
+    // Checking if Web3 has been injected by the browser (Mist/MetaMask)
+    
+    
     // Check that the web page is run in a secure context,
     // as otherwise MetaMask won't be available
     /*if(location.protocol !== 'https:') {
