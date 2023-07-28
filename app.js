@@ -31,7 +31,7 @@ app.get('/readT', async (req, res) => {
     data = JSON.parse(data);
     let sum = data.eth + data.bsc
     console.log("Total tokens = " + sum)
-	res.send(sum)
+	res.send(sum.toString())
 });
 
 app.listen(process.env.PORT || 8080, () => {

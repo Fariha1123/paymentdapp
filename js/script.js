@@ -58,7 +58,8 @@ $(async function() {
 
     $('#connectWallet').click(function (e) {
         e.preventDefault();
-        if (typeof web3 == 'undefined') {
+        console.log(typeof web3)
+        if (typeof ethereum == 'undefined') {
             // Use Mist/MetaMask's provider
             alert("Your browser is not web3 supported, please connect to one of the following wallet")
             // Show a modal with two options : Metamask & Trust wallet
