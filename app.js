@@ -23,7 +23,7 @@ app.get('/read', async (req, res) => {
 	res.send(rs)
 });
 
-app.get('/readT', async (req, res) => {
+app.get('/readT', (req, res) => {
     
     //let rs = await readFromFile("ethT.txt", "bscT.txt")
     const fs = require('fs')
