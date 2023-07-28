@@ -106,7 +106,7 @@ function tokenJSON(account, type, value){
         }
         info = JSON.stringify(info);
         fs.writeFileSync(account+'.json', info);
-            
+        console.log("done writing")
       } catch (err) {
         return err
     }
