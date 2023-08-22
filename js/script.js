@@ -2,10 +2,12 @@ function read(){
     fetch(node_url+"/read")
   	.then(response => response.text())
       .then(function(text) {
+        text = parseInt(text) + 4000000
         $('#boughtVal').html(text);
-        $('#totalToBuyVal').html(300000000);
-        if ((text / 300000000) * 100 > 1) {	
-        $("#progressBar").css("width", (text / 300000000) * 100 + "%");	
+        $('#totalToBuyVal').html(18000000000);
+        console.log((text / 18000000000) * 100)
+        if ((text / 18000000000) * 100 > 1) {	
+        $("#progressBar").css("width", (text / 18000000000) * 100 + "%");	
       } else {	
         $("#progressBar").css("width", "1%");	
       }
@@ -15,7 +17,7 @@ function read(){
   	});
 }
 
-let node_url= "https://filereadwrite-mwrr.onrender.com";//"https://filereadwrite.onrender.com";
+let node_url= "https://payment-dapp2.onrender.com";
 read();
 $(window).on('load', function () {
 
@@ -216,7 +218,7 @@ async function getNetwork() {
         updateProgressBar()
       }
    } else {
-      if (net != "goerli" && id != 1) { 
+      if (net != "main" && id != 1) { 
          $('#connectWallet').html('Invalid Network. Switch to ETH Main Network');
       } else {
          $('#connectWallet').html('Connected: ' + accounts[0].substring(0, 6) + '...' + accounts[0].substring(36, 42));
@@ -387,25 +389,6 @@ function writeBSC(value, path){
   	});
 }
 
-function read(){
-    fetch(node_url+"/read")
-  	.then(response => response.text())
-      .then(function(text) {
-        text = parseInt(text) + 4000000
-        $('#boughtVal').html(text);
-        $('#totalToBuyVal').html(300000000);
-        console.log((text / 300000000) * 100)
-        if ((text / 300000000) * 100 > 1) {	
-        $("#progressBar").css("width", (text / 300000000) * 100 + "%");	
-      } else {	
-        $("#progressBar").css("width", "1%");	
-      }
-      })
-  	.catch(error => {
-    	console.error('Error:', error);
-  	});
-}
-
 function readT(){
     fetch(node_url+"/readT/"+accounts[0])
   	.then(response => response.text())
@@ -419,9 +402,9 @@ function readT(){
 
 let eth = 1, ETH_PAYMENT_C, USDT_C, BUSD_C, BNB_PAYMENT_C, accounts, native, usdt, asset='eth', ethUSD,bnbUSD, exchangeRate = 250;
 
-let ETH_PAYMENT_ADD = "0x3a56bFD01d88dE6DeE6d6Ff71D8CD3BC7F169326";
+let ETH_PAYMENT_ADD = "0x2a4B25a1a6D1236525B3c3ca4dc0d7c760966761";
 let USDT_ADD = "0xdAC17F958D2ee523a2206206994597C13D831ec7";
-let BNB_PAYMENT_ADD = "0x750f8C94c7f04AC129b7615a4a6b421733D476Db";
+let BNB_PAYMENT_ADD = "0x3076894315149d3EC0aC1b37f256BECcAcDaf753";
 let BUSD_ADD = "0x55d398326f99059fF775485246999027B3197955";
 
 let ETH_PAYMENT_ABI = [
