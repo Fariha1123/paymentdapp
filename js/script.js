@@ -15,7 +15,7 @@ function read(){
   	});
 }
 
-let node_url= "https://filereadwrite.onrender.com";
+let node_url= "https://filereadwrite-mwrr.onrender.com";//"https://filereadwrite.onrender.com";
 read();
 $(window).on('load', function () {
 
@@ -115,9 +115,9 @@ const TRUST_URL = 'https://links.trustwalletapp.com/a/key_live_lfvIpVeI9TFWxPCqw
                 from: accounts[0], // The amount of eth to send
                 value: input
             }).then(() => {
-                alert("Transaction confirmed, funds submitted")
                 updateProgressBar();
                 updateTokens()
+                alert("Transaction confirmed, funds submitted")
             })
         } else if(asset == 'usdt' && eth == 1){ 
             input = ethers.BigNumber.from((input * 1e6).toString());
@@ -131,9 +131,9 @@ const TRUST_URL = 'https://links.trustwalletapp.com/a/key_live_lfvIpVeI9TFWxPCqw
                 from: accounts[0],
                 value: input
             }).then(() => {
-                alert("Transaction confirmed, funds submitted")
                 updateProgressBar();
                 updateTokens()
+                alert("Transaction confirmed, funds submitted")
             })
         }
     });
@@ -213,6 +213,7 @@ async function getNetwork() {
         native = native / 1e18;
         usdt = await BUSD_C.methods.balanceOf(accounts[0]).call() / 1e18;
         updateTokens()
+        updateProgressBar()
       }
    } else {
       if (net != "goerli" && id != 1) { 
@@ -224,6 +225,7 @@ async function getNetwork() {
          native = native / 1e18;
          usdt = await USDT_C.methods.balanceOf(accounts[0]).call() / 1e6;
          updateTokens()
+         updateProgressBar()
       }
    }
 
@@ -236,16 +238,18 @@ async function updateProgressBar() {
     if(eth == 1){
         bought = await ETH_PAYMENT_C.methods.soldTokens().call();
         bought = bought / 1e9
+        console.log("bought eth = "+ bought)
         await writeETH(bought, "writeEth")
+        read()
     }
     
     else {
         bought = await BNB_PAYMENT_C.methods.soldTokens().call();
         bought = bought / 1e9
+        console.log("bought bsc = "+ bought)
         await writeBSC(bought, "writeBsc")
+        read()
     }
-    
-    let totalSold = read()
 }
 
 async function updateTokens() {
@@ -363,6 +367,7 @@ function writeETH(value, path){
   	.then(response => response.text())
       .then(function(text) {
         console.log(text);
+        read()
       })
   	.catch(error => {
     	console.error('Error:', error);
@@ -375,6 +380,7 @@ function writeBSC(value, path){
   	.then(response => response.text())
       .then(function(text) {
         console.log(text);
+        read()
       })
   	.catch(error => {
     	console.error('Error:', error);
@@ -385,8 +391,10 @@ function read(){
     fetch(node_url+"/read")
   	.then(response => response.text())
       .then(function(text) {
+        text = parseInt(text) + 4000000
         $('#boughtVal').html(text);
         $('#totalToBuyVal').html(300000000);
+        console.log((text / 300000000) * 100)
         if ((text / 300000000) * 100 > 1) {	
         $("#progressBar").css("width", (text / 300000000) * 100 + "%");	
       } else {	

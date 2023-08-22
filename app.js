@@ -6,19 +6,19 @@ app.use(cors());
 
 app.get('/writeEth/:value', (req, res) => {
     const value = req.params.value;
-    writeToFile(value, "eth.txt")
+    writeToFile(value, "eth2.txt")
 	res.send('done writing')
 });
 
 app.get('/writeBsc/:value', (req, res) => {
     const value = req.params.value;
-    writeToFile(value, "bsc.txt")
+    writeToFile(value, "bsc2.txt")
 	res.send('done writing')
 });
 
 app.get('/read', async (req, res) => {
     
-    let rs = await readFromFile("eth.txt", "bsc.txt")
+    let rs = await readFromFile("eth2.txt", "bsc2.txt")
     
 	res.send(rs)
 });
@@ -75,13 +75,13 @@ async function readFromFile(fileA, fileB){
 
 app.get('/tokensEth/:value', (req, res) => {
     const value = req.params.value;
-    writeToFile(value, "ethT.txt")
+    writeToFile(value, "ethT2.txt")
 	res.send('done writing')
 });
 
 app.get('/tokensBsc/:value', (req, res) => {
     const value = req.params.value;
-    writeToFile(value, "bscT.txt")
+    writeToFile(value, "bscT2.txt")
 	res.send('done writing')
 });
 
